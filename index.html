@@ -1,0 +1,1098 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4ecdf">
+<title>最爱的♥霜霜♥</title>
+
+<style>
+:root {
+  --paper: #f4ecdf;
+  --paper-dark: #eadccd;
+  --ink: #514238;
+  --muted: #927f70;
+  --rose: #b98278;
+  --line: #dfcfc0;
+  --cream: #fffaf2;
+  --gold: #c4a486;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Songti SC", "Noto Serif CJK SC",
+    "STSong", Georgia, serif;
+  line-height: 1.85;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  opacity: .13;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+}
+
+#book {
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+.page {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+  padding:
+    max(28px, env(safe-area-inset-top))
+    22px
+    max(75px, calc(env(safe-area-inset-bottom) + 65px));
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      #fffaf4 0%,
+      var(--paper) 62%,
+      #eadccd 100%
+    );
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px) scale(.99);
+  z-index: 1;
+
+  transition:
+    opacity .75s ease,
+    transform .85s cubic-bezier(.22,.7,.2,1),
+    visibility .75s;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* 第五页、第六页：统一冬夜文字与雪花样式 */
+/* 第五页、第六页：共用冬夜照片背景 */
+.snow-page {
+  position: absolute;
+  isolation: isolate;
+
+  background:
+    linear-gradient(
+      rgba(8, 18, 32, .38),
+      rgba(8, 18, 32, .48)
+    ),
+    url("assets/winter-night.jpg");
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  color: #fff0dc;
+}
+
+/* 雪花层 */
+.snow-page .snow-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 文字内容层 */
+.snow-page .page-inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* 文字颜色 */
+.snow-page .kicker {
+  color: #f0c99e;
+  text-shadow: 0 2px 5px rgba(0,0,0,.7);
+}
+
+.snow-page h2,
+.snow-page .final-line {
+  color: #fff3df;
+  text-shadow: 0 2px 8px rgba(0,0,0,.75);
+}
+
+.snow-page .lead,
+.snow-page .small-note,
+.snow-page .caption {
+  color: #f3e4ce;
+  text-shadow: 0 2px 6px rgba(0,0,0,.8);
+}
+
+.snow-page .ornament {
+  color: #f0c99e;
+}
+
+/* 第五页信纸 */
+.snow-page .letter {
+  background: rgba(255,250,242,.97);
+  color: #514238;
+  box-shadow: 0 15px 55px rgba(0,0,0,.35);
+}
+
+.snow-page .letter p {
+  color: #514238;
+}
+
+.snow-page .signature {
+  color: #806b59 !important;
+}
+
+/* 按钮 */
+.snow-page .primary {
+  background: rgba(255,250,242,.96);
+  color: #514238;
+  border-color: #d5b99b;
+}
+
+/* 页码 */
+body:has(.snow-page.active) .page-number {
+  color: #fff0dc;
+  background: rgba(15,28,44,.85);
+  border-color: #a18e78;
+}
+
+.page.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  z-index: 2;
+}
+
+.page-inner {
+  width: min(100%, 720px);
+  margin: auto;
+}
+
+.ornament {
+  font-size: 20px;
+  color: var(--gold);
+  letter-spacing: .5em;
+  margin-bottom: 18px;
+}
+
+.eyebrow, .kicker {
+  font: 10px/1.7 Arial, sans-serif;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: clamp(40px, 10vw, 76px);
+  letter-spacing: .13em;
+  margin: 18px 0;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: clamp(25px, 6vw, 36px);
+  letter-spacing: .09em;
+  margin: 10px 0 18px;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: 400;
+  margin: 12px 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  letter-spacing: .13em;
+  color: var(--muted);
+}
+
+.lead {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 auto 24px;
+  max-width: 480px;
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 11px 28px;
+  border: 1px solid #bd9d84;
+  border-radius: 30px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: .16em;
+  background: #fffaf280;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.primary:active {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.cover-frame {
+  width: min(68vw, 280px);
+  aspect-ratio: 4 / 5;
+  margin: 25px auto 0;
+  padding: 10px 10px 34px;
+  background: var(--cream);
+  box-shadow: 0 16px 40px #654c351c;
+  transform: rotate(-2deg);
+}
+
+.cover-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg,#e9d9c8,#f8eee2);
+}
+
+.caption {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .14em;
+  margin-top: 10px;
+}
+
+.story-photo {
+  width: min(72vw, 320px);
+  max-height: 40dvh;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  padding: 9px 9px 30px;
+  background: var(--cream);
+  box-shadow: 0 14px 36px #654c351b;
+  transform: rotate(-1.5deg);
+}
+
+.story-copy {
+  max-width: 540px;
+  margin: 20px auto 0;
+  text-align: center;
+}
+
+.story-copy p,
+.letter p {
+  font-size: 14px;
+  color: #79695d;
+  white-space: pre-line;
+  line-height: 2.15;
+}
+
+/* 3D 照片轮播 */
+
+.carousel {
+  position: relative;
+  width: min(100%, 560px);
+  height: min(48dvh, 400px);
+  margin: 18px auto 8px;
+  perspective: 1000px;
+  touch-action: pan-y;
+}
+
+.slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: min(57vw, 245px);
+  height: min(40dvh, 320px);
+
+  padding: 9px 9px 30px;
+  background: var(--cream);
+  box-shadow: 0 14px 35px #5b46321c;
+
+  transform: translate(-50%,-50%) scale(.65);
+  opacity: 0;
+  filter: saturate(.75);
+
+  transition:
+    transform .45s ease,
+    opacity .45s ease;
+
+  pointer-events: none;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #eadccd;
+}
+
+.slide.center {
+  transform: translate(-50%,-50%) scale(1);
+  opacity: 1;
+  z-index: 3;
+  filter: none;
+  pointer-events: auto;
+}
+
+.slide.left {
+  transform: translate(calc(-50% - 31vw),-50%) scale(.78) rotate(-7deg);
+  opacity: .58;
+  z-index: 2;
+}
+
+.slide.right {
+  transform: translate(calc(-50% + 31vw),-50%) scale(.78) rotate(7deg);
+  opacity: .58;
+  z-index: 2;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  margin-top: 8px;
+}
+
+.carousel-controls button {
+  border: 1px solid var(--line);
+  background: #fffaf2aa;
+  color: var(--ink);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.counter {
+  font: 11px Arial, sans-serif;
+  letter-spacing: .15em;
+  color: var(--muted);
+}
+
+.carousel-hint {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .12em;
+}
+
+/* 信件 */
+
+.letter {
+  max-width: 650px;
+  margin: auto;
+  padding: clamp(25px,6vw,54px);
+  background: #fffaf2d9;
+  box-shadow: 0 15px 45px #59432a12;
+  position: relative;
+  text-align: left;
+}
+
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid #eadfd2;
+  pointer-events: none;
+}
+
+.letter p {
+  position: relative;
+  margin: 0 0 1.1em;
+}
+
+.signature {
+  text-align: right !important;
+  color: var(--muted) !important;
+  margin-top: 28px !important;
+}
+
+.final-line {
+  font-size: clamp(23px,5.8vw,36px);
+  letter-spacing: .1em;
+  line-height: 1.8;
+  margin: 22px auto;
+  max-width: 560px;
+}
+
+.small-note {
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+
+/* 页码和音乐按钮 */
+
+.page-number {
+  position: fixed;
+  z-index: 30;
+  bottom: max(18px,env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  font: 10px Arial,sans-serif;
+  letter-spacing: .18em;
+  color: #988575;
+  background: #fffaf2b8;
+  border: 1px solid #e4d7c9;
+  border-radius: 20px;
+  padding: 6px 12px;
+}
+
+.music {
+  position: fixed;
+  z-index: 31;
+  right: 14px;
+  bottom: max(15px,env(safe-area-inset-bottom));
+  border: 1px solid #cbb39d;
+  background: #fffaf2e8;
+  color: var(--ink);
+  border-radius: 24px;
+  padding: 8px 12px;
+  font: 11px Arial,sans-serif;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+/* 点击页面上方或下方翻页 */
+
+.edge {
+  position: fixed;
+  z-index: 25;
+  left: 0;
+  right: 0;
+  height: 13%;
+  cursor: pointer;
+}
+
+.edge.top { top: 0; }
+.edge.bottom { bottom: 0; }
+
+.nav-hint {
+  position: fixed;
+  z-index: 26;
+  bottom: 55px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: .13em;
+  color: #a18e7e;
+  pointer-events: none;
+}
+
+#book.is-first .nav-hint {
+  display: none;
+}
+
+@media(min-width:700px) {
+  .page {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+
+  .edge {
+    height: 11%;
+  }
+
+  .slide.left {
+    transform: translate(calc(-50% - 210px),-50%) scale(.78) rotate(-7deg);
+  }
+
+  .slide.right {
+    transform: translate(calc(-50% + 210px),-50%) scale(.78) rotate(7deg);
+  }
+}
+
+@media(max-height:700px) {
+  .page {
+    padding-top: max(18px,env(safe-area-inset-top));
+    padding-bottom: 70px;
+  }
+
+  .cover-frame {
+    width: min(45vw,210px);
+    margin-top: 12px;
+  }
+
+  .story-photo {
+    max-height: 32dvh;
+  }
+
+  .carousel {
+    height: 40dvh;
+  }
+
+  .slide {
+    height: 32dvh;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="book" class="is-first">
+
+  <!-- 第1页：封面 -->
+  <section class="page active">
+    <div class="page-inner">
+      <div class="ornament">✧　❀　✧</div>
+
+      <h1>最爱的霜霜</h1>
+
+      <div class="subtitle">
+        关于我们，关于那些认真爱过的日子
+      </div>
+
+      <div class="cover-frame">
+        <img src="assets/photo-01.jpg" alt="珍藏的回忆照片">
+      </div>
+
+      <button class="primary" id="begin">
+        翻开这本回忆　→
+      </button>
+    </div>
+  </section>
+
+  <!-- 第2页：故事的开始 -->
+  <section class="page">
+    <div class="page-inner">
+      <h2>故事的开始</h2>
+
+      <img class="story-photo"
+        src="assets/photo-02.jpg"
+        alt="我们的第一张回忆照片">
+
+      <div class="story-copy">
+        <h3>原来，遇见也可以很特别</h3>
+        <p>我还是个鬼火少年，你是一个单车佬，在路上我们遇到了。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第3页：照片轮播 -->
+  <section class="page">
+    <div class="page-inner">
+      <h2>我们一起做了好多事情</h2>
+
+      <p class="lead">
+        不是因为很多事情很有意思，和是你一起去做就会变得很有意思。
+      </p>
+
+      <div class="carousel" id="carousel">
+        <figure class="slide">
+          <img src="assets/photo-03.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-04.jpg" >
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-05.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-06.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-07.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-08.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-09.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-10.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-11.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-12.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-13.jpg">
+        </figure>        
+        <figure class="slide">
+          <img src="assets/photo-14.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-15.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-16.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-17.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-18.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-19.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-20.jpg">
+        </figure>
+        <figure class="slide">
+          <img src="assets/photo-21.jpg">
+        </figure>                  
+      </div>
+
+      <div class="carousel-controls">
+        <button type="button" id="photoPrev">‹</button>
+        <span class="counter" id="photoCount">01 / 05</span>
+        <button type="button" id="photoNext">›</button>
+      </div>
+
+      <div class="carousel-hint">
+        左右滑动照片，慢慢看看
+      </div>
+
+      <div class="story-copy">
+        <p>一起骑车、一起散步、一起吃饭、一起旅游、一起睡荤荤觉，嘿嘿</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第4页：特别的一天 -->
+  <section class="page">
+    <div class="page-inner">
+      <h2>一直记得的那一天 2026年3月26日</h2>
+
+      <img class="story-photo"
+        src="assets/photo-22.jpg"
+        alt="特别的一天">
+
+      <div class="story-copy">
+        <p>这是你第一次和我提分开，我想不明白为什么，感觉特别伤心</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第5页：信件 -->
+  <section class="page snow-page">
+    <canvas class="snow-canvas"></canvas>
+    <div class="page-inner">
+      <h2>有些话，想慢慢说给你听</h2>
+
+      <p class="lead">不急，慢慢读。</p>
+
+      <div class="letter">
+        <p>TO霜霜：
+
+  每次有很重要的场合我都会叫你霜霜。这段时间我一直在反思你说过的话，别人都可以接女朋友我不行、我很对你很小气、我的人生规划没有你、你倒贴等等，这其实是一个问题，就是我没钱。之前我会极力挽留，因为可以解释、我可以改，但现在坚持下去好像会让你不开心、焦虑，因为没钱，后面还会遇到我不够浪漫、不够爱你等等问题。我一直把你当作我的正缘，觉得就是命注定的，我很想和你一直在一起，哪怕是异地，光想想我还有你我都能感觉到幸福。可缘分好像也没那么坚固，我偷偷看过你的抖音，你现在觉得自己一个人更好，所以你去追求你的自由吧，我再纠缠就不礼貌了。很感谢这一年的陪伴，这段时间我这辈子都不会忘记，你对我的影响也会伴随我一生。也许未来有一天我们会再见面，要是那个时候我意气风发，你也未嫁，我就去追你。</p>
+
+        <p class="signature">
+          —— 爱你的小温
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第6页：结尾 -->
+<section class="page snow-page">
+  <canvas class="snow-canvas"></canvas>
+  <div class="page-inner">
+      <div class="ornament">❀</div>
+
+      <div class="final-line">
+        好啦，有缘再见
+      </div>
+
+      <p class="small-note">
+        以后的日子要好好吃饭、睡觉，希望你能一直身体健康，找到人生的意义。
+      </p>
+
+      <div class="cover-frame"
+        style="width:min(55vw,230px);margin-top:32px">
+        <img src="assets/photo-23.jpg">
+      </div>
+
+      <button class="primary" id="backToStart">
+        重新翻阅
+      </button>
+    </div>
+  </section>
+
+</div>
+
+<!-- 页面上下点击区域 -->
+<div class="edge top" id="upperZone"></div>
+<div class="edge bottom" id="lowerZone"></div>
+
+<div class="nav-hint" id="navHint">
+  轻触页面下方或向上滑动，继续阅读　↓
+</div>
+
+<div class="page-number" id="pageNumber">
+  01 / 06
+</div>
+
+<button class="music" id="musicBtn">
+  ♫ 播放音乐
+</button>
+
+<audio id="bgm"
+  src="assets/温泉.mp3"
+  preload="none"
+  loop>
+</audio>
+
+<script>
+(() => {
+  const book = document.getElementById("book");
+  const pages = [...document.querySelectorAll(".page")];
+
+  const pageNumber = document.getElementById("pageNumber");
+  const hint = document.getElementById("navHint");
+
+  let current = 0;
+
+  function showPage(next) {
+    next = Math.max(0, Math.min(pages.length - 1, next));
+
+    if (next === current) return;
+
+    current = next;
+
+    pages.forEach((page, i) => {
+      page.classList.toggle("active", i === current);
+
+      if (i === current) {
+        page.scrollTop = 0;
+      }
+    });
+
+    book.classList.toggle("is-first", current === 0);
+
+    pageNumber.textContent =
+      String(current + 1).padStart(2, "0") +
+      " / " +
+      String(pages.length).padStart(2, "0");
+
+    hint.textContent =
+      current === pages.length - 1
+        ? "轻触页面上方或向下滑动，返回上一页　↑"
+        : "轻触页面下方或向上滑动，继续阅读　↓";
+  }
+
+  document.getElementById("begin")
+    .addEventListener("click", () => showPage(1));
+
+  document.getElementById("backToStart")
+    .addEventListener("click", () => showPage(0));
+
+  document.getElementById("lowerZone")
+    .addEventListener("click", () => showPage(current + 1));
+
+  document.getElementById("upperZone")
+    .addEventListener("click", () => showPage(current - 1));
+
+  // 电脑键盘翻页
+  document.addEventListener("keydown", e => {
+    if ([
+      "ArrowDown",
+      "ArrowRight",
+      "PageDown",
+      " "
+    ].includes(e.key)) {
+      e.preventDefault();
+      showPage(current + 1);
+    }
+
+    if ([
+      "ArrowUp",
+      "ArrowLeft",
+      "PageUp"
+    ].includes(e.key)) {
+      e.preventDefault();
+      showPage(current - 1);
+    }
+
+    if (e.key === "Home") showPage(0);
+    if (e.key === "End") showPage(pages.length - 1);
+  });
+
+  // 手机上下滑动翻页
+  let startX = 0;
+  let startY = 0;
+
+  book.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  book.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+
+    if (
+      Math.abs(dy) > 55 &&
+      Math.abs(dy) > Math.abs(dx) * 1.15
+    ) {
+      showPage(current + (dy < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+
+  // 3D照片轮播
+  const slides = [...document.querySelectorAll(".slide")];
+  const photoCount = document.getElementById("photoCount");
+
+  let photoIndex = 0;
+
+  function renderPhotos() {
+    slides.forEach((slide, i) => {
+      slide.className = "slide";
+
+      const offset =
+        (i - photoIndex + slides.length) % slides.length;
+
+      if (offset === 0) {
+        slide.classList.add("center");
+      } else if (offset === 1) {
+        slide.classList.add("right");
+      } else if (offset === slides.length - 1) {
+        slide.classList.add("left");
+      }
+    });
+
+    photoCount.textContent =
+      String(photoIndex + 1).padStart(2, "0") +
+      " / " +
+      String(slides.length).padStart(2, "0");
+  }
+
+  function movePhoto(delta) {
+    photoIndex =
+      (photoIndex + delta + slides.length) % slides.length;
+
+    renderPhotos();
+  }
+
+  document.getElementById("photoPrev")
+    .addEventListener("click", () => movePhoto(-1));
+
+  document.getElementById("photoNext")
+    .addEventListener("click", () => movePhoto(1));
+
+  // 照片区域左右滑动
+  const carousel = document.getElementById("carousel");
+
+  let photoStartX = 0;
+  let photoStartY = 0;
+
+  carousel.addEventListener("touchstart", e => {
+    photoStartX = e.changedTouches[0].clientX;
+    photoStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  carousel.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - photoStartX;
+    const dy = e.changedTouches[0].clientY - photoStartY;
+
+    if (
+      Math.abs(dx) > 35 &&
+      Math.abs(dx) > Math.abs(dy)
+    ) {
+      movePhoto(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  renderPhotos();
+
+
+// 第五页、第六页共用雪花动画
+const snowPages = [...document.querySelectorAll(".snow-page")];
+
+const snowLayers = snowPages.map(page => ({
+  page,
+  canvas: page.querySelector(".snow-canvas"),
+  ctx: page.querySelector(".snow-canvas").getContext("2d")
+}));
+
+let snowflakes = [];
+let snowAnimation = null;
+let snowWidth = 0;
+let snowHeight = 0;
+
+function resizeSnow() {
+  const rect = snowPages[0].getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  snowWidth = rect.width;
+  snowHeight = rect.height;
+
+  snowLayers.forEach(layer => {
+    layer.canvas.width = snowWidth * dpr;
+    layer.canvas.height = snowHeight * dpr;
+
+    layer.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  });
+
+  if (snowflakes.length === 0) {
+    snowflakes = Array.from({ length: 120 }, () => ({
+      x: Math.random() * snowWidth,
+      y: Math.random() * snowHeight,
+      radius: Math.random() * 2 + .7,
+      speed: Math.random() * 1.1 + .4,
+      drift: Math.random() * .7 - .35,
+      opacity: Math.random() * .4 + .45
+    }));
+  }
+}
+
+function drawSnow() {
+  const visibleLayers = snowLayers.filter(layer => {
+    const style = getComputedStyle(layer.page);
+    return style.visibility !== "hidden" &&
+      Number(style.opacity) > .01;
+  });
+
+  if (visibleLayers.length === 0) {
+    snowAnimation = null;
+    return;
+  }
+
+  visibleLayers.forEach(layer => {
+    const ctx = layer.ctx;
+    ctx.clearRect(0, 0, snowWidth, snowHeight);
+
+    snowflakes.forEach(flake => {
+      ctx.beginPath();
+      ctx.arc(
+        flake.x,
+        flake.y,
+        flake.radius,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle =
+        `rgba(255,255,255,${flake.opacity})`;
+
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = "rgba(255,255,255,.65)";
+      ctx.fill();
+    });
+
+    ctx.shadowBlur = 0;
+  });
+
+  snowflakes.forEach(flake => {
+    flake.y += flake.speed;
+    flake.x += flake.drift + Math.sin(flake.y * .01) * .25;
+
+    if (flake.y > snowHeight + 5) {
+      flake.y = -5;
+      flake.x = Math.random() * snowWidth;
+    }
+
+    if (flake.x > snowWidth + 5) flake.x = -5;
+    if (flake.x < -5) flake.x = snowWidth + 5;
+  });
+
+  snowAnimation = requestAnimationFrame(drawSnow);
+}
+
+function updateSnow() {
+  const visible = snowLayers.some(layer => {
+    const style = getComputedStyle(layer.page);
+    return style.visibility !== "hidden" &&
+      Number(style.opacity) > .01;
+  });
+
+  if (visible) {
+    if (!snowWidth || !snowHeight) {
+      resizeSnow();
+    }
+
+    if (!snowAnimation) {
+      drawSnow();
+    }
+  } else if (snowAnimation) {
+    cancelAnimationFrame(snowAnimation);
+    snowAnimation = null;
+
+    snowLayers.forEach(layer => {
+      layer.ctx.clearRect(0, 0, snowWidth, snowHeight);
+    });
+  }
+}
+
+window.addEventListener("resize", () => {
+  if (snowLayers.some(layer =>
+    layer.page.classList.contains("active")
+  )) {
+    resizeSnow();
+  }
+});
+
+const snowObserver = new MutationObserver(updateSnow);
+
+snowPages.forEach(page => {
+  snowObserver.observe(page, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+});
+
+updateSnow();
+
+
+
+  // 背景音乐
+  const audio = document.getElementById("bgm");
+  const musicBtn = document.getElementById("musicBtn");
+
+  musicBtn.addEventListener("click", async () => {
+    if (audio.paused) {
+      try {
+        await audio.play();
+        musicBtn.textContent = "♫ 暂停音乐";
+      } catch (error) {
+        musicBtn.textContent = "♫ 请检查音乐文件";
+      }
+    } else {
+      audio.pause();
+      musicBtn.textContent = "♫ 播放音乐";
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

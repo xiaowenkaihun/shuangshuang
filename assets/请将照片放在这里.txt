@@ -1,0 +1,1 @@
+将照片放入此文件夹，并命名为 photo-01.jpg、photo-02.jpg、photo-03.jpg。音乐命名为 music.mp3。
