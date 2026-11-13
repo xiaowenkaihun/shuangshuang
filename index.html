@@ -596,8 +596,8 @@ h3 {
         alt="我们的第一张回忆照片">
 
       <div class="story-copy">
-        <h3>原来，遇见也可以很特别</h3>
-        <p>我还是个鬼火少年，你是一个单车佬，在路上我们遇到了。</p>
+        <h3>缘分竟然如此的美妙</h3>
+        <p>我是个鬼火少年，你是一个单车佬，2025年9月20日我们在路上遇到了。</p>
       </div>
     </div>
   </section>
@@ -605,10 +605,10 @@ h3 {
   <!-- 第3页：照片轮播 -->
   <section class="page">
     <div class="page-inner">
-      <h2>我们一起做了好多事情</h2>
+      <h2>后来，我们一起做了好多好多好多事情</h2>
 
       <p class="lead">
-        不是因为很多事情很有意思，和是你一起去做就会变得很有意思。
+        不是因为这些事情很有意思，是和你一起去做就会变得很有意思。
       </p>
 
       <div class="carousel" id="carousel">
@@ -678,11 +678,11 @@ h3 {
       </div>
 
       <div class="carousel-hint">
-        左右滑动照片，慢慢看看
+        左右滑动照片，慢慢看
       </div>
 
       <div class="story-copy">
-        <p>一起骑车、一起散步、一起吃饭、一起旅游、一起睡荤荤觉，嘿嘿</p>
+        <p>一起骑车、一起散步、一起吃饭、一起旅游、一起睡荤荤觉，嘿嘿😳</p>
       </div>
     </div>
   </section>
@@ -697,7 +697,7 @@ h3 {
         alt="特别的一天">
 
       <div class="story-copy">
-        <p>这是你第一次和我提分开，我想不明白为什么，感觉特别伤心</p>
+        <p>这是你第一次和我提分手，我想不明白为什么，感觉特别伤心😭</p>
       </div>
     </div>
   </section>
@@ -707,16 +707,14 @@ h3 {
     <canvas class="snow-canvas"></canvas>
     <div class="page-inner">
       <h2>有些话，想慢慢说给你听</h2>
-
-      <p class="lead">不急，慢慢读。</p>
-
       <div class="letter">
-        <p>TO霜霜：
-
-  每次有很重要的场合我都会叫你霜霜。这段时间我一直在反思你说过的话，别人都可以接女朋友我不行、我很对你很小气、我的人生规划没有你、你倒贴等等，这其实是一个问题，就是我没钱。之前我会极力挽留，因为可以解释、我可以改，但现在坚持下去好像会让你不开心、焦虑，因为没钱，后面还会遇到我不够浪漫、不够爱你等等问题。我一直把你当作我的正缘，觉得就是命注定的，我很想和你一直在一起，哪怕是异地，光想想我还有你我都能感觉到幸福。可缘分好像也没那么坚固，我偷偷看过你的抖音，你现在觉得自己一个人更好，所以你去追求你的自由吧，我再纠缠就不礼貌了。很感谢这一年的陪伴，这段时间我这辈子都不会忘记，你对我的影响也会伴随我一生。也许未来有一天我们会再见面，要是那个时候我意气风发，你也未嫁，我就去追你。</p>
+        <p>TO霜霜：</p>
+        <p>
+  每次有很重要的场合我都会叫你霜霜。这段时间我回想你说过的话，别人都可以接女朋友我不行、我很对你很小气、我的人生规划没有你、不想和你结婚、你倒贴等等，这其实是一个问题，就是我没钱。之前分开我想极力挽留，因为可以解释、可以改，但现在坚持下去好像会让你不开心、焦虑，因为没钱，后面可能还会遇到不能给你安全感、我不够浪漫、不够爱你等等问题，我也想开车接送你、陪你到处玩、给你买好多好多礼物、立马把你娶回来，但是哪有这么简单。我从一开始就把你当作我的正缘，觉得就是命中注定的，想和你一直在一起，哪怕是异地，光想想我还有你我都能感觉到幸福。可缘分抵不过困难，我偷偷看过你的抖音，至少现在你觉得一个人会更好，所以你去追求你想要的生活和自由吧，再纠缠下去就不礼貌了。很感谢这接近一年的陪伴，我这辈子都不会忘记这段感情，你对我的影响也会伴随我一生。也许未来有一天我们会再见面，要是那个时候我意气风发，你也未嫁，我就去追你。
+         </p>
 
         <p class="signature">
-          —— 爱你的小温
+          —— 爱你的小温🐷
         </p>
       </div>
     </div>
@@ -761,13 +759,13 @@ h3 {
   01 / 06
 </div>
 
-<button class="music" id="musicBtn">
-  ♫ 播放音乐
+<button class="music" id="musicBtn" type="button">
+  ♫ 点击播放音乐
 </button>
 
 <audio id="bgm"
   src="assets/温泉.mp3"
-  preload="none"
+  preload="auto"
   loop>
 </audio>
 
@@ -1073,23 +1071,46 @@ updateSnow();
 
 
 
-  // 背景音乐
-  const audio = document.getElementById("bgm");
-  const musicBtn = document.getElementById("musicBtn");
+  // 背景音乐控制
+const audio = document.getElementById("bgm");
+const musicBtn = document.getElementById("musicBtn");
 
-  musicBtn.addEventListener("click", async () => {
-    if (audio.paused) {
-      try {
-        await audio.play();
-        musicBtn.textContent = "♫ 暂停音乐";
-      } catch (error) {
-        musicBtn.textContent = "♫ 请检查音乐文件";
-      }
-    } else {
-      audio.pause();
-      musicBtn.textContent = "♫ 播放音乐";
-    }
-  });
+// 更新按钮状态
+function updateMusicButton() {
+  musicBtn.textContent = audio.paused
+    ? "♫ 播放音乐"
+    : "♫ 暂停音乐";
+}
+
+// 尝试播放音乐
+async function playMusic() {
+  try {
+    await audio.play();
+    updateMusicButton();
+  } catch (error) {
+    // 浏览器禁止自动播放时，等待用户点击
+    musicBtn.textContent = "♫ 点击播放音乐";
+  }
+}
+
+// 点击按钮：播放或暂停
+musicBtn.addEventListener("click", async () => {
+  if (audio.paused) {
+    await playMusic();
+  } else {
+    audio.pause();
+    updateMusicButton();
+  }
+});
+
+// 监听实际播放状态
+audio.addEventListener("play", updateMusicButton);
+audio.addEventListener("pause", updateMusicButton);
+
+// 网页打开后，自动尝试播放
+window.addEventListener("load", () => {
+  playMusic();
+});
 
 })();
 </script>
