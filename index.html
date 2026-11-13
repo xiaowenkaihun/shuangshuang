@@ -558,6 +558,95 @@ h3 {
     transition: none !important;
   }
 }
+
+/* 首次翻页音乐确认弹窗 */
+.music-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+
+  background: rgba(35, 28, 24, .48);
+  backdrop-filter: blur(5px);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+.music-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.music-dialog {
+  width: min(100%, 340px);
+  padding: 35px 25px 30px;
+  text-align: center;
+
+  background: #fffaf2;
+  border: 1px solid #dfcfc0;
+  border-radius: 5px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.2);
+
+  transform: translateY(15px);
+  transition: transform .35s ease;
+}
+
+.music-modal.show .music-dialog {
+  transform: translateY(0);
+}
+
+.music-dialog .music-icon {
+  font-size: 30px;
+  color: #b98278;
+  margin-bottom: 12px;
+}
+
+.music-dialog h3 {
+  font-size: 21px;
+  color: #514238;
+  margin: 5px 0 12px;
+}
+
+.music-dialog p {
+  font-size: 13px;
+  color: #927f70;
+  margin: 0;
+  letter-spacing: .06em;
+}
+
+.music-dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.music-dialog-buttons button {
+  padding: 10px 19px;
+  border-radius: 25px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.music-yes {
+  border: 1px solid #b98278;
+  background: #b98278;
+  color: white;
+}
+
+.music-no {
+  border: 1px solid #dfcfc0;
+  background: transparent;
+  color: #79695d;
+}
+
 </style>
 </head>
 
@@ -747,6 +836,25 @@ h3 {
 
 </div>
 
+<!-- 首次翻页音乐确认弹窗 -->
+<div class="music-modal" id="musicModal">
+  <div class="music-dialog">
+    <div class="music-icon">🎵</div>
+
+    <h3>准备了一首歌，你要听吗？</h3>
+
+    <div class="music-dialog-buttons">
+      <button class="music-yes" id="musicYes">
+        嗯，我要听
+      </button>
+
+      <button class="music-no" id="musicNo">
+        算了，不想听
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- 页面上下点击区域 -->
 <div class="edge top" id="upperZone"></div>
 <div class="edge bottom" id="lowerZone"></div>
@@ -759,7 +867,8 @@ h3 {
   01 / 06
 </div>
 
-<button class="music" id="musicBtn" type="button">
+<button class="music" id="musicBtn" type="button"
+style="display:none">
   ♫ 点击播放音乐
 </button>
 
@@ -785,6 +894,10 @@ h3 {
     if (next === current) return;
 
     current = next;
+    // 第一次离开封面时，询问是否播放音乐
+    if (current === 1 && !musicAsked) {
+      musicAsked = true;
+      musicModal.classList.add("show");}
 
     pages.forEach((page, i) => {
       page.classList.toggle("active", i === current);
@@ -795,6 +908,8 @@ h3 {
     });
 
     book.classList.toggle("is-first", current === 0);
+    // 第一页隐藏音乐按钮，其他页面显示
+    musicBtn.style.display = current === 0 ? "none" : "block";
 
     pageNumber.textContent =
       String(current + 1).padStart(2, "0") +
@@ -806,9 +921,27 @@ h3 {
         ? "轻触页面上方或向下滑动，返回上一页　↑"
         : "轻触页面下方或向上滑动，继续阅读　↓";
   }
+  
+// 首次翻开第一页时，询问是否播放音乐
+  const musicModal = document.getElementById("musicModal");
+
+  let musicAsked = false;
 
   document.getElementById("begin")
-    .addEventListener("click", () => showPage(1));
+  .addEventListener("click", () => showPage(1));
+
+// 选择播放音乐
+  document.getElementById("musicYes")
+  .addEventListener("click", async () => {
+    musicModal.classList.remove("show");
+    await playMusic();
+  });
+
+// 选择暂时不播放
+  document.getElementById("musicNo")
+  .addEventListener("click", () => {
+    musicModal.classList.remove("show");
+  });
 
   document.getElementById("backToStart")
     .addEventListener("click", () => showPage(0));
@@ -1107,10 +1240,6 @@ musicBtn.addEventListener("click", async () => {
 audio.addEventListener("play", updateMusicButton);
 audio.addEventListener("pause", updateMusicButton);
 
-// 网页打开后，自动尝试播放
-window.addEventListener("load", () => {
-  playMusic();
-});
 
 })();
 </script>
